@@ -182,7 +182,7 @@
             <span class="btn-icon">⊘</span>
             <span class="btn-text">
               <span class="btn-name">DECRYPT</span>
-              <span class="btn-desc">Restore original</span>
+              <span class="btn-desc">Restore original by selecting key file</span>
             </span>
             <span class="btn-glow"></span>
           </button>
@@ -267,9 +267,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <span>PIXCRYPT &copy; 2026</span>
-      <span class="footer-sep">///</span>
-      <span>AES-256 COMPATIBLE</span>
+      <span>PIXCRYPT &copy; 2025</span>
       <span class="footer-sep">///</span>
       <span>CLIENT-SIDE ONLY</span>
     </footer>
@@ -309,13 +307,34 @@
     // Hide "NO DATA" overlays by watching canvas width/height attributes.
     // app.js sets canvas.width = img.width before drawing, so a MutationObserver
     // on those attributes fires at exactly the right moment — no context patching needed.
+    const statusLabels = {
+      originalCanvas:  { ready: 'LOADED',    empty: 'AWAITING INPUT' },
+      encryptedCanvas: { ready: 'ENCRYPTED', empty: 'AWAITING INPUT' },
+      decryptedCanvas: { ready: 'DECRYPTED', empty: 'AWAITING INPUT' },
+    };
+
     function hideOverlay(canvas) {
-      const overlay = canvas.closest('.canvas-wrap')?.querySelector('.canvas-overlay');
+      const wrap = canvas.closest('.canvas-wrap');
+      const overlay = wrap?.querySelector('.canvas-overlay');
       if (overlay) overlay.style.display = 'none';
+      const box = canvas.closest('.box');
+      const status = box?.querySelector('.box-status');
+      if (status) {
+        const label = statusLabels[canvas.id]?.ready || 'READY';
+        status.textContent = label;
+        status.classList.add('status--active');
+      }
     }
     function showOverlay(canvas) {
-      const overlay = canvas.closest('.canvas-wrap')?.querySelector('.canvas-overlay');
+      const wrap = canvas.closest('.canvas-wrap');
+      const overlay = wrap?.querySelector('.canvas-overlay');
       if (overlay) overlay.style.display = '';
+      const box = canvas.closest('.box');
+      const status = box?.querySelector('.box-status');
+      if (status) {
+        status.textContent = 'AWAITING INPUT';
+        status.classList.remove('status--active');
+      }
     }
 
     const canvasIds = ['originalCanvas', 'encryptedCanvas', 'decryptedCanvas'];
@@ -397,6 +416,24 @@
     });
     document.getElementById('scrambleManualToggle').addEventListener('change', function() {
       document.getElementById('scrambleSliders').classList.toggle('enabled', this.checked);
+    });
+
+    // ── PROTECT BUTTON INNER HTML FROM app.js textContent OVERWRITES ─
+    // app.js does e.g. xorBtn.textContent = 'Generating quantum keys...'
+    // which nukes all the inner spans. We intercept the setter and redirect
+    // any write to just the .btn-name span instead.
+    ['xorBtn', 'scrambleBtn', 'decryptBtn'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      Object.defineProperty(btn, 'textContent', {
+        set(val) {
+          const nameEl = btn.querySelector('.btn-name');
+          if (nameEl) nameEl.textContent = val;
+        },
+        get() {
+          return btn.innerText;
+        }
+      });
     });
 
     // ── PATCH app.js FUNCTIONS TO USE MANUAL VALUES ───────────────
