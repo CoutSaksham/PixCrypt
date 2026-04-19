@@ -31,7 +31,7 @@
 
 ## Overview
 
-PIXCRYPT is a client-side image encryption tool that runs entirely in the browser — no data ever leaves your machine. It encrypts images using two techniques: a multi-round XOR cipher applied to pixel colour channels, and a seeded Fisher-Yates pixel scramble that randomises the spatial arrangement of every pixel in the image. Both methods can be used independently or in combination. Encryption keys are sourced from the [ANU Quantum Random Number Generator](https://qrng.anu.edu.au/) by default, with a seamless fallback to the browser's built-in `crypto.getRandomValues` if the quantum API is unavailable. All parameters are also fully configurable by hand through the UI.
+PixCrypt is a client-side image encryption tool that runs entirely in the browser — no data ever leaves your machine. It encrypts images using two techniques: a multi-round XOR cipher applied to pixel colour channels, and a seeded Fisher-Yates pixel scramble that randomises the spatial arrangement of every pixel in the image. Both methods can be used independently or in combination. Encryption keys are sourced from the [ANU Quantum Random Number Generator](https://qrng.anu.edu.au/) by default, with a seamless fallback to the browser's built-in `crypto.getRandomValues` if the quantum API is unavailable. All parameters are also fully configurable by hand through the UI.
 
 ---
 
