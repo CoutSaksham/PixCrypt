@@ -1,4 +1,4 @@
-// PIXCRYPT - Image Encryption/Decryption Application
+// PixCrypt - Image Encryption/Decryption Application
 // Uses XOR encryption with 5 keys and pixel scrambling with quantum-generated values
 
 let originalImageData = null;
