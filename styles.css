@@ -410,6 +410,11 @@ input[type="file"] { display: none; }
   color: var(--text-dim);
   letter-spacing: 0.15em;
   white-space: nowrap;
+  transition: color 0.3s;
+}
+.box-status.status--active {
+  color: var(--teal);
+  text-shadow: 0 0 8px var(--teal);
 }
 
 .canvas-wrap {
