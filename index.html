@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIXCRYPT</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Ambient background layers -->
+  <div class="bg-grid"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  <div class="noise"></div>
+
+  <!-- Floating particles -->
+  <div class="particles" id="particles"></div>
+
+  <div class="wrapper">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-line top-line"></div>
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect x="2" y="2" width="40" height="40" rx="4" stroke="#00f5d4" stroke-width="1.5"/>
+            <rect x="8" y="8" width="28" height="28" rx="2" stroke="#00f5d4" stroke-width="1" stroke-dasharray="3 2"/>
+            <path d="M16 22 L22 16 L28 22 L22 28 Z" fill="#00f5d4" opacity="0.2" stroke="#00f5d4" stroke-width="1.5"/>
+            <circle cx="22" cy="22" r="3" fill="#00f5d4"/>
+            <line x1="22" y1="8" x2="22" y2="13" stroke="#00f5d4" stroke-width="1.5"/>
+            <line x1="22" y1="31" x2="22" y2="36" stroke="#00f5d4" stroke-width="1.5"/>
+            <line x1="8" y1="22" x2="13" y2="22" stroke="#00f5d4" stroke-width="1.5"/>
+            <line x1="31" y1="22" x2="36" y2="22" stroke="#00f5d4" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1 class="title glitch" data-text="PIXCRYPT">PIXCRYPT</h1>
+          <p class="subtitle">// IMAGE ENCRYPTION SUITE v2.4.1</p>
+        </div>
+        <div class="status-badge">
+          <span class="dot pulse"></span>
+          <span>SYSTEM ACTIVE</span>
+        </div>
+      </div>
+      <div class="header-line bottom-line"></div>
+    </header>
+
+    <!-- Upload Zone -->
+    <section class="upload-section">
+      <label for="fileInput" class="upload-zone" id="uploadZone">
+        <div class="upload-inner">
+          <div class="upload-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <path d="M24 8 L24 32" stroke="#00f5d4" stroke-width="2" stroke-linecap="round"/>
+              <path d="M14 18 L24 8 L34 18" stroke="#00f5d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 36 L8 40 L40 40 L40 36" stroke="#00f5d4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="upload-label">DROP IMAGE FILE HERE</p>
+          <p class="upload-sub">or click to browse &mdash; PNG, JPG, BMP, GIF</p>
+          <div class="upload-corners">
+            <span class="corner tl"></span>
+            <span class="corner tr"></span>
+            <span class="corner bl"></span>
+            <span class="corner br"></span>
+          </div>
+        </div>
+      </label>
+      <input type="file" id="fileInput" accept="image/*">
+      <div class="file-info" id="fileInfo">
+        <span class="file-icon">◈</span>
+        <span id="fileName">NO FILE SELECTED</span>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <section class="controls-section">
+      <div class="section-label">ENCRYPTION PROTOCOLS</div>
+      <div class="buttons">
+
+        <!-- XOR button + dropdown -->
+        <div class="btn-group">
+          <button id="xorBtn" class="btn btn--primary" data-label="XOR">
+            <span class="btn-bg"></span>
+            <span class="btn-icon">⊕</span>
+            <span class="btn-text">
+              <span class="btn-name">XOR CIPHER</span>
+              <span class="btn-desc">Bitwise key encryption</span>
+            </span>
+            <span class="btn-glow"></span>
+          </button>
+          <button class="dropdown-toggle dropdown-toggle--primary" id="xorToggle" aria-expanded="false" title="Configure XOR keys manually">
+            <span class="toggle-icon">▾</span>
+            <span class="toggle-label">MANUAL KEYS</span>
+          </button>
+          <div class="dropdown" id="xorDropdown">
+            <div class="dropdown-header">
+              <span class="dropdown-title">XOR KEY CONFIGURATION</span>
+              <label class="mode-switch">
+                <input type="checkbox" id="xorManualToggle">
+                <span class="switch-track"></span>
+                <span class="switch-label">USE MANUAL KEYS</span>
+              </label>
+            </div>
+            <div class="sliders" id="xorSliders">
+              <div class="slider-row" data-key="0">
+                <span class="slider-label">KEY <span class="key-idx">01</span></span>
+                <input type="range" class="xor-slider" min="0" max="255" value="128">
+                <span class="slider-val">128</span>
+                <span class="slider-hex">0x80</span>
+              </div>
+              <div class="slider-row" data-key="1">
+                <span class="slider-label">KEY <span class="key-idx">02</span></span>
+                <input type="range" class="xor-slider" min="0" max="255" value="64">
+                <span class="slider-val">64</span>
+                <span class="slider-hex">0x40</span>
+              </div>
+              <div class="slider-row" data-key="2">
+                <span class="slider-label">KEY <span class="key-idx">03</span></span>
+                <input type="range" class="xor-slider" min="0" max="255" value="192">
+                <span class="slider-val">192</span>
+                <span class="slider-hex">0xC0</span>
+              </div>
+              <div class="slider-row" data-key="3">
+                <span class="slider-label">KEY <span class="key-idx">04</span></span>
+                <input type="range" class="xor-slider" min="0" max="255" value="32">
+                <span class="slider-val">32</span>
+                <span class="slider-hex">0x20</span>
+              </div>
+              <div class="slider-row" data-key="4">
+                <span class="slider-label">KEY <span class="key-idx">05</span></span>
+                <input type="range" class="xor-slider" min="0" max="255" value="255">
+                <span class="slider-val">255</span>
+                <span class="slider-hex">0xFF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scramble button + dropdown -->
+        <div class="btn-group">
+          <button id="scrambleBtn" class="btn btn--secondary" data-label="SCR">
+            <span class="btn-bg"></span>
+            <span class="btn-icon">⇄</span>
+            <span class="btn-text">
+              <span class="btn-name">SCRAMBLE</span>
+              <span class="btn-desc">Pixel permutation</span>
+            </span>
+            <span class="btn-glow"></span>
+          </button>
+          <button class="dropdown-toggle dropdown-toggle--secondary" id="scrambleToggle" aria-expanded="false" title="Configure scramble seed manually">
+            <span class="toggle-icon">▾</span>
+            <span class="toggle-label">MANUAL SEED</span>
+          </button>
+          <div class="dropdown" id="scrambleDropdown">
+            <div class="dropdown-header">
+              <span class="dropdown-title">SCRAMBLE SEED CONFIGURATION</span>
+              <label class="mode-switch">
+                <input type="checkbox" id="scrambleManualToggle">
+                <span class="switch-track"></span>
+                <span class="switch-label">USE MANUAL SEED</span>
+              </label>
+            </div>
+            <div class="sliders" id="scrambleSliders">
+              <div class="slider-row">
+                <span class="slider-label">SEED</span>
+                <input type="range" id="seedSlider" min="2048" max="4096" value="3072">
+                <span class="slider-val" id="seedVal">3072</span>
+                <span class="slider-hex" id="seedHex">0xC00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decrypt button (no dropdown) -->
+        <div class="btn-group">
+          <button id="decryptBtn" class="btn btn--danger" data-label="DEC">
+            <span class="btn-bg"></span>
+            <span class="btn-icon">⊘</span>
+            <span class="btn-text">
+              <span class="btn-name">DECRYPT</span>
+              <span class="btn-desc">Restore original</span>
+            </span>
+            <span class="btn-glow"></span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Canvas Grid -->
+    <section class="canvas-section">
+      <div class="grid">
+
+        <div class="box" id="box-original">
+          <div class="box-header">
+            <span class="box-tag">[ 01 ]</span>
+            <h3 class="box-title">ORIGINAL</h3>
+            <span class="box-status" id="status-original">AWAITING INPUT</span>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="originalCanvas"></canvas>
+            <div class="canvas-overlay" id="overlay-original">
+              <span>NO DATA</span>
+            </div>
+          </div>
+          <div class="box-footer">
+            <span id="info-original">—</span>
+          </div>
+        </div>
+
+        <div class="divider-arrow">
+          <svg viewBox="0 0 40 80" fill="none">
+            <line x1="20" y1="0" x2="20" y2="60" stroke="#00f5d4" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <path d="M10 55 L20 72 L30 55" stroke="#00f5d4" stroke-width="1.5" fill="none"/>
+          </svg>
+          <div class="arrow-label">PROCESS</div>
+        </div>
+
+        <div class="box" id="box-encrypted">
+          <div class="box-header">
+            <span class="box-tag">[ 02 ]</span>
+            <h3 class="box-title">ENCRYPTED</h3>
+            <span class="box-status" id="status-encrypted">AWAITING INPUT</span>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="encryptedCanvas"></canvas>
+            <div class="canvas-overlay" id="overlay-encrypted">
+              <span>NO DATA</span>
+            </div>
+          </div>
+          <div class="box-footer">
+            <span id="info-encrypted">—</span>
+          </div>
+        </div>
+
+        <div class="divider-arrow">
+          <svg viewBox="0 0 40 80" fill="none">
+            <line x1="20" y1="0" x2="20" y2="60" stroke="#00f5d4" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <path d="M10 55 L20 72 L30 55" stroke="#00f5d4" stroke-width="1.5" fill="none"/>
+          </svg>
+          <div class="arrow-label">RESTORE</div>
+        </div>
+
+        <div class="box" id="box-decrypted">
+          <div class="box-header">
+            <span class="box-tag">[ 03 ]</span>
+            <h3 class="box-title">DECRYPTED</h3>
+            <span class="box-status" id="status-decrypted">AWAITING INPUT</span>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="decryptedCanvas"></canvas>
+            <div class="canvas-overlay" id="overlay-decrypted">
+              <span>NO DATA</span>
+            </div>
+          </div>
+          <div class="box-footer">
+            <span id="info-decrypted">—</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>PIXCRYPT &copy; 2026</span>
+      <span class="footer-sep">///</span>
+      <span>AES-256 COMPATIBLE</span>
+      <span class="footer-sep">///</span>
+      <span>CLIENT-SIDE ONLY</span>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 28; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.cssText = `
+        left:${Math.random()*100}%;
+        top:${Math.random()*100}%;
+        animation-delay:${Math.random()*8}s;
+        animation-duration:${6+Math.random()*10}s;
+        width:${1+Math.random()*2}px;
+        height:${1+Math.random()*2}px;
+        opacity:${0.15+Math.random()*0.4};
+      `;
+      container.appendChild(p);
+    }
+
+    // Drag-and-drop highlight
+    const zone = document.getElementById('uploadZone');
+    ['dragenter','dragover'].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('drag-over'); }));
+    ['dragleave','drop'].forEach(e => zone.addEventListener(e, ev => { zone.classList.remove('drag-over'); }));
+
+    // File name display
+    document.getElementById('fileInput').addEventListener('change', function() {
+      const name = this.files[0]?.name || 'NO FILE SELECTED';
+      document.getElementById('fileName').textContent = name.toUpperCase();
+    });
+
+    // Hide "NO DATA" overlays by watching canvas width/height attributes.
+    // app.js sets canvas.width = img.width before drawing, so a MutationObserver
+    // on those attributes fires at exactly the right moment — no context patching needed.
+    function hideOverlay(canvas) {
+      const overlay = canvas.closest('.canvas-wrap')?.querySelector('.canvas-overlay');
+      if (overlay) overlay.style.display = 'none';
+    }
+    function showOverlay(canvas) {
+      const overlay = canvas.closest('.canvas-wrap')?.querySelector('.canvas-overlay');
+      if (overlay) overlay.style.display = '';
+    }
+
+    const canvasIds = ['originalCanvas', 'encryptedCanvas', 'decryptedCanvas'];
+    canvasIds.forEach(id => {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+
+      new MutationObserver(mutations => {
+        mutations.forEach(m => {
+          if (m.attributeName === 'width' || m.attributeName === 'height') {
+            if (canvas.width > 0 && canvas.height > 0) hideOverlay(canvas);
+          }
+        });
+      }).observe(canvas, { attributes: true, attributeFilter: ['width', 'height'] });
+
+      const ctx = canvas.getContext('2d');
+      const _clearRect = ctx.clearRect.bind(ctx);
+      ctx.clearRect = function(x, y, w, h) {
+        _clearRect(x, y, w, h);
+        if (x === 0 && y === 0 && w === canvas.width && h === canvas.height) {
+          showOverlay(canvas);
+        }
+      };
+    });
+
+    // ── DROPDOWN TOGGLES ──────────────────────────────────────────
+    function setupDropdownToggle(toggleId, dropdownId) {
+      const toggle = document.getElementById(toggleId);
+      const dropdown = document.getElementById(dropdownId);
+      if (!toggle || !dropdown) return;
+      toggle.addEventListener('click', () => {
+        const open = dropdown.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+        toggle.classList.toggle('active', open);
+      });
+    }
+    setupDropdownToggle('xorToggle', 'xorDropdown');
+    setupDropdownToggle('scrambleToggle', 'scrambleDropdown');
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', e => {
+      ['xor', 'scramble'].forEach(prefix => {
+        const toggle = document.getElementById(prefix + 'Toggle');
+        const dropdown = document.getElementById(prefix + 'Dropdown');
+        if (toggle && dropdown && !toggle.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          toggle.setAttribute('aria-expanded', false);
+          toggle.classList.remove('active');
+        }
+      });
+    });
+
+    // ── XOR SLIDER LIVE UPDATE ────────────────────────────────────
+    document.querySelectorAll('.slider-row').forEach(row => {
+      const slider = row.querySelector('input[type=range]');
+      const valEl  = row.querySelector('.slider-val');
+      const hexEl  = row.querySelector('.slider-hex');
+      if (!slider) return;
+      slider.addEventListener('input', () => {
+        const v = parseInt(slider.value);
+        if (valEl) valEl.textContent = v;
+        if (hexEl) hexEl.textContent = '0x' + v.toString(16).toUpperCase().padStart(2, '0');
+      });
+    });
+
+    // ── SEED SLIDER LIVE UPDATE ───────────────────────────────────
+    const seedSlider = document.getElementById('seedSlider');
+    const seedVal    = document.getElementById('seedVal');
+    const seedHex    = document.getElementById('seedHex');
+    seedSlider.addEventListener('input', () => {
+      const v = parseInt(seedSlider.value);
+      seedVal.textContent = v;
+      seedHex.textContent = '0x' + v.toString(16).toUpperCase();
+    });
+
+    // ── MANUAL KEYS / SEED ENABLE STYLING ────────────────────────
+    document.getElementById('xorManualToggle').addEventListener('change', function() {
+      document.getElementById('xorSliders').classList.toggle('enabled', this.checked);
+    });
+    document.getElementById('scrambleManualToggle').addEventListener('change', function() {
+      document.getElementById('scrambleSliders').classList.toggle('enabled', this.checked);
+    });
+
+    // ── PATCH app.js FUNCTIONS TO USE MANUAL VALUES ───────────────
+    // Helpers to read current UI state
+    function getManualXorKeys() {
+      return Array.from(document.querySelectorAll('.xor-slider')).map(s => parseInt(s.value));
+    }
+    function getManualSeed() {
+      return parseInt(document.getElementById('seedSlider').value);
+    }
+    function isXorManual() {
+      return document.getElementById('xorManualToggle').checked;
+    }
+    function isScrambleManual() {
+      return document.getElementById('scrambleManualToggle').checked;
+    }
+
+    // Patch handleXorEncryption
+    const _origXor = handleXorEncryption;
+    window.handleXorEncryption = async function() {
+      if (!isXorManual()) return _origXor();
+      if (!originalImageData) { alert('Please upload an image first'); return; }
+      try {
+        xorBtn.disabled = true;
+        const btnName = xorBtn.querySelector('.btn-name');
+        btnName.textContent = 'ENCRYPTING...';
+        encryptionKeys = getManualXorKeys();
+        scrambleSeed = null;
+        isScrambled = false;
+        const encryptedData = applyXOR(originalImageData, encryptionKeys);
+        encryptedImageData = new ImageData(encryptedData, originalImageData.width, originalImageData.height);
+        encryptedCtx.putImageData(encryptedImageData, 0, 0);
+        saveKeysToFile(encryptionKeys, null, false);
+        alert('Image encrypted with manual XOR keys! Keys saved to file.');
+      } catch(err) {
+        alert('Encryption failed: ' + err.message);
+      } finally {
+        xorBtn.disabled = false;
+        xorBtn.querySelector('.btn-name').textContent = 'XOR CIPHER';
+      }
+    };
+    xorBtn.addEventListener('click', e => { e.stopImmediatePropagation(); window.handleXorEncryption(); }, true);
+
+    // Patch handleScrambleEncryption
+    const _origScramble = handleScrambleEncryption;
+    window.handleScrambleEncryption = async function() {
+      const manualXor      = isXorManual();
+      const manualSeedFlag = isScrambleManual();
+      if (!manualXor && !manualSeedFlag) return _origScramble();
+      if (!originalImageData) { alert('Please upload an image first'); return; }
+      try {
+        scrambleBtn.disabled = true;
+        const btnName = scrambleBtn.querySelector('.btn-name');
+        btnName.textContent = 'ENCRYPTING...';
+        encryptionKeys = manualXor ? getManualXorKeys() : await getQuantumRandomNumbers(5);
+        scrambleSeed   = manualSeedFlag ? getManualSeed() : await getQuantumSeed();
+        isScrambled    = true;
+        const xoredData = applyXOR(originalImageData, encryptionKeys);
+        const xoredImageData = new ImageData(xoredData, originalImageData.width, originalImageData.height);
+        const totalPixels = originalImageData.width * originalImageData.height;
+        const permutation = generatePermutation(totalPixels, scrambleSeed);
+        const scrambledData = scramblePixels(xoredImageData, permutation);
+        encryptedImageData = new ImageData(scrambledData, originalImageData.width, originalImageData.height);
+        encryptedCtx.putImageData(encryptedImageData, 0, 0);
+        saveKeysToFile(encryptionKeys, scrambleSeed, true);
+        alert('Image encrypted with ' + (manualXor ? 'manual' : 'quantum') + ' XOR keys + ' + (manualSeedFlag ? 'manual' : 'quantum') + ' seed! Keys saved to file.');
+      } catch(err) {
+        alert('Encryption failed: ' + err.message);
+      } finally {
+        scrambleBtn.disabled = false;
+        scrambleBtn.querySelector('.btn-name').textContent = 'SCRAMBLE';
+      }
+    };
+    scrambleBtn.addEventListener('click', e => { e.stopImmediatePropagation(); window.handleScrambleEncryption(); }, true);
+  </script>
+</body>
+</html>
